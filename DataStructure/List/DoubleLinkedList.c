@@ -25,7 +25,17 @@ DoubleList* initList(){
     tmp->current = NULL;
     return tmp;
 }
-
+// using head node
+/*
+DoubleList* initList(){
+    DoubleList* tmp = malloc(sizeof(DoubleList));
+    tmp->first = malloc(sizeof(listNode)); // tmp-> first == head node
+    tmp->length = 0;
+    tmp->current = tmp->first;
+    return tmp;
+}
+이렇게 하면 insertNode에서 if문으로 구분 안해도됨
+*/
 // function isEmpty
 // is current node empty?
 int isEmpty(DoubleList* list){
