@@ -116,10 +116,15 @@ std::string Table::print_table(){
 
 int main(){
   Table TxtTable = Table(5,5);
+  std::ofstream out("test.txt");
+
   TxtTable.reg_cell(new Cell("a", 1,1, &TxtTable),1,1);
   TxtTable.reg_cell(new Cell("b", 3,1, &TxtTable),3,1);
   TxtTable.reg_cell(new Cell("c", 2,4, &TxtTable),2,4);
-  TxtTable.print_table();
+  std::string s = TxtTable.print_table();
+  if(out.is_open()){
+    out << s;
+  }
 
   return 0;
 }
