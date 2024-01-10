@@ -13,69 +13,113 @@ Table 클래스에는 2차원 배열로 Cell 객체들에 대한 정보 (참고�
 class Table;
 
 class Cell {
-  Table* table;  // 어느 테이블에 속해있는지
-  std::string data;
-  int x, y;  // 테이블 에서의 위치
- public:
-  Cell(const std::string& data) : data(data){};
+  protected:
+    Table* table;  // 어느 테이블에 속해있는지
+    std::string data;
+    int x, y;  // 테이블 에서의 위치
+  public:
+    Cell(std::string data, int x, int y, Table* table);
+    std::string get_string(); // x,y에 해당하는 원소 반환
 };
+
+Cell::Cell(std::string data, int x, int y, Table* table) : data(data), x(x), y(y), table(table){};
+
+std::string Cell::get_string(){
+  return data;
+};  // 해당 위치의 Cell 데이터를 얻는다.
 
 class Table {
   Cell*** data_base;  // 왜 3중 포인터 인지 잘 생각해보세요!
+  int max_row, max_col;
  public:
-  Table();
-  virtual std::string print_table() = 0;
+  Table(int max_row, int max_col);
+  std::string print_table();
   void reg_cell(Cell* c, int row, int col);  // Cell 을 등록한다
-  std::string get_cell_std::string(int row, int col);  // 해당 위치의 Cell 데이터를 얻는다.
+  std::string get_cell(int row, int col);  // 해당 위치의 Cell 데이터를 얻는다.
   ~Table();
 };
 
+// table 생성자
+Table::Table(int max_row, int max_col):max_row(max_row), max_col(max_col){
+  data_base = new Cell**[max_row];
+  for(int i =0; i < max_row ;i++){
+    data_base[i] = new Cell*[max_col];
+    for(int j =0; j< max_col; j++){
+      data_base[i][j] = NULL;
+    }
+  }
+};
+
+
+// table 삭제
+Table::~Table(){
+  for(int i =0; i < max_row ;i++){
+    for(int j =0; j< max_col; j++){
+      if(data_base[i][j]){
+        delete data_base[i][j];
+      }
+    }
+    delete[] data_base[i];
+  }
+  delete[] data_base;
+}
+
 void Table::reg_cell(Cell* c, int row, int col){
-  std::cout << "row : "<< row << "col : "<< col << std::endl;
+  // std::cout << "row : " << row << ", col : "<< col << std::endl;
   data_base[row][col] = c;
-  c.x = row;
-  c.y = col;
-  c.table = this;
 }
 
+// 해당 위치의 Cell 데이터를 얻는다.
+std::string Table::get_cell(int row, int col){
+  std::string s = data_base[row][col]->get_string();
+  return s;
+} 
 
-ostream& operator<<(std::ostream& o, Table& t) {
-  o << t.print_table();
-  return o;
+
+std::string Table::print_table(){
+  // std::cout << "table start" << std::endl;
+  std::string ftable = "     |";
+  
+  for(int i =0; i < max_row ;i++){
+    for(int j =0; j< max_col; j++){
+      if(i==0){
+        ftable += std::to_string(j+1);
+        ftable += "    |";
+      }else{
+        if(j==0){
+          ftable += std::to_string(i);
+          ftable += "    |";
+        }else{
+          if(data_base[i][j]){
+            // std::cout<< "i : " << i <<", j : " << j << ", string : "<< get_cell(i,j) << std::endl;
+            ftable += get_cell(i,j);
+            ftable += "    |";
+          }else{
+            ftable += "     |";
+          }
+        }
+      }
+    }
+    ftable += "\n";
+  }
+
+
+  std::cout << ftable << std::endl;
+  return ftable;
 }
 
-class TextTable : public Table {
+// std::ostream& operator<<(std::ostream& o, Table& t) {
+//   o << t.print_table();
+//   return o;
+// }
 
-public:
-  // 생성자
-  TextTable() : Table() {};
-
-  std::string print_table() override {
-    std::cout << "Text table" << std::endl;
-    
-  }
-};
-class CSVTable : public Table {
-  
-public:
-  std::string print_table() override {
-    std::cout << "CSV table" << std::endl;
-  }
-
-};
-class HTMLTable : public Table {
-  
-public:
-  std::string print_table() override {
-    std::cout << "HTML table" << std::endl;
-  }
-
-
-};
 
 int main(){
-  Table Text = new TextTable();
-  Cell c1 = new Cell("first");
+  Table TxtTable = Table(5,5);
+  TxtTable.reg_cell(new Cell("a", 1,1, &TxtTable),1,1);
+  TxtTable.reg_cell(new Cell("b", 3,1, &TxtTable),3,1);
+  TxtTable.reg_cell(new Cell("c", 2,4, &TxtTable),2,4);
+  TxtTable.print_table();
 
   return 0;
 }
