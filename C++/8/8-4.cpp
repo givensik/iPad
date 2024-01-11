@@ -64,7 +64,23 @@ template <typename Cont, typename Comp>
 void bubble_sort(Cont& cont, Comp& comp){
   for (int i = 0; i < cont.size(); i++) {
     for (int j = i + 1; j < cont.size(); j++) {
+      // 이런식으로 함수는 아니지만 함수인 객체를 함수 객체 (Function Object, Functor)라고 함
       if (comp(cont[i], cont[j])) {
+        cont.swap(i, j);
+      }
+    }
+  }
+}
+/*
+  이런식으로 typename Cont일때랑, typename Comp까지 추가했을 때랑 선언을 해두면
+  bubble_sort(a); 이러면 Cont만 있을 때의 코드를 인스턴스화 하고,
+  bubble_sort(a, b); 이러면 두번째 코드로 읽는다. 
+*/
+template <typename Cont>
+void bubble_sort(Cont& cont){
+  for (int i = 0; i < cont.size(); i++) {
+    for (int j = i + 1; j < cont.size(); j++) {
+      if (cont[i] > cont[j]) {
         cont.swap(i, j);
       }
     }
