@@ -24,4 +24,4 @@ int main(){
   std::cout << Min(a,b) << std::endl; 
 
   return 0;
-}
+}1
