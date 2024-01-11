@@ -1,5 +1,5 @@
 #include <iostream>
-// vector 도전기
+
 template <typename T>
 class Vector {
   T* data;
@@ -59,17 +59,27 @@ class Vector {
 
 };
 
-
-template <typename Cont>
-void bubble_sort(Cont& cont){
+// cont[i] > cont[j]에서 > 를 Comp라는 함수로 바꿀 수 있다.
+template <typename Cont, typename Comp>
+void bubble_sort(Cont& cont, Comp& comp){
   for (int i = 0; i < cont.size(); i++) {
     for (int j = i + 1; j < cont.size(); j++) {
-      if (cont[i] > cont[j]) {
+      if (comp(cont[i], cont[j])) {
         cont.swap(i, j);
       }
     }
   }
 }
+
+// 위의 경우에는 Comp()이니까 연산자 오버로딩을 해야함
+struct Comp1 {
+  bool operator()(int a, int b) { return a > b; }
+};
+
+struct Comp2 {
+  bool operator()(int a, int b) { return a < b; }
+};
+
 
 
 int main(){
@@ -82,7 +92,12 @@ int main(){
   int_vec.push(15);
   int_vec.print();
 
-  bubble_sort(int_vec);
+  Comp1 comp1;
+  Comp2 comp2;
+
+  bubble_sort(int_vec, comp1);
+  bubble_sort(int_vec, comp2);
+  
   int_vec.print();
 
   // std::cout << int_vec[1] <<std::endl;
