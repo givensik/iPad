@@ -46,7 +46,7 @@ int findBug(int** p, int M, int N, int K){
    for(int j = 0; j < N ; j++){
       for(int k = 0; k< M; k++){
             if(p[j][k] == 1){
-               printf("j:%d, k:%d일때 일단 1이야\n",j,k);
+               // printf("j:%d, k:%d일때 일단 1이야\n",j,k);
                // k>0, j>0
                if( j>0 && k>0){
                   // 위 왼쪽 모두 0일 때 -> 카운트 세기(새로 나온 애니까)
