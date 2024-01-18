@@ -4,13 +4,12 @@
 void makeField(int** p, int M, int N, int K){
    int x;
    int y;
-   /*
+
    p = (int**)malloc(sizeof(int*)*N);
       // p[N]
    for(int j = 0; j < N ; j++){
          p[j] = (int*)malloc(sizeof(int)*M);
    }
-   */
       // 기본 값으로 0 입력
       for(int j = 0; j < N ; j++){
          for(int k = 0; k< M; k++){
